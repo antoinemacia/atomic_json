@@ -1,6 +1,8 @@
 require "bundler/gem_tasks"
 require "rake/testtask"
+require 'standalone_migrations'
 
+StandaloneMigrations::Tasks.load_tasks
 Rake::TestTask.new(:test) do |t|
   t.libs << "test"
   t.libs << "lib"
