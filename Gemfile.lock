@@ -40,6 +40,8 @@ GEM
     concurrent-ruby (1.0.5)
     crass (1.0.4)
     erubi (1.7.1)
+    factory_bot (4.10.0)
+      activesupport (>= 3.0.0)
     i18n (0.9.1)
       concurrent-ruby (~> 1.0)
     jaro_winkler (1.5.1)
@@ -98,6 +100,7 @@ DEPENDENCIES
   atomic_json!
   bundler (~> 1.16.a)
   byebug (~> 10.0.2)
+  factory_bot (~> 4.0)
   minitest (~> 5.0)
   pg
   rake (~> 10.0)

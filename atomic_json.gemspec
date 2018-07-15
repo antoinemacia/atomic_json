@@ -31,4 +31,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rubocop", "~> 0.58.1"
   spec.add_development_dependency "byebug", "~> 10.0.2"
   spec.add_development_dependency "standalone_migrations", "~> 5.2.5"
+  spec.add_development_dependency "factory_bot", "~> 4.0"
 end

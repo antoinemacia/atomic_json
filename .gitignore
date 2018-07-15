@@ -7,5 +7,6 @@
 /spec/reports/
 /tmp/
 
+.byebug_history
 # Editors
-/.idea/
+.idea/

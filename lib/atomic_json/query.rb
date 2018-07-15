@@ -5,7 +5,10 @@ module AtomicJson
 
     CREATE_NEW_COLUMN = false
 
+    class QueryError < StandardError; end
+
     attr_reader :record, :jsonb_field
+    attr_accessor :query
 
     def initialize(record, jsonb_field)
       @record = record
@@ -13,11 +16,25 @@ module AtomicJson
     end
 
     def build(attributes)
-      if attributes.keys.count > 1
+      self.query = case attributes.keys.count
+      when 0
+        nil
+      when 1
         single_update_query(attributes.keys.first, attributes.values.first)
       else
         multi_update_query(attributes)
       end
+      self
+    end
+
+    def parse
+      self
+    end
+
+    def run!
+      ActiveRecord::Base.connection.execute(query)
+    rescue ActiveRecord::StatementInvalid => e
+      raise QueryError, e.message
     end
 
     private
@@ -25,12 +42,16 @@ module AtomicJson
       def single_update_query(key, value)
         <<~SQL
           UPDATE #{record.class.table_name}
-          SET body = jsonb_set(#{jsonb_field}, '{#{key}}', #{value}, #{CREATE_NEW_COLUMN})
+          SET #{jsonb_field} = jsonb_set(#{jsonb_field}, '{#{key}}', #{type_matcher(value)}, #{CREATE_NEW_COLUMN})
           WHERE id = #{record.id};
         SQL
       end
 
       def multi_update_query(hash)
+      end
+
+      def type_matcher(value)
+        value.is_a?(String) ? "'\"#{value}\"'" : %('#{value}')
       end
 
   end
