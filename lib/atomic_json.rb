@@ -2,15 +2,12 @@
 
 require 'active_record'
 require 'active_record/connection_adapters/postgresql_adapter'
+require 'atomic_json/version'
+require 'atomic_json/updater'
+require 'atomic_json/query'
+require 'atomic_json/type_validation'
 
-module AtomicJson
-
-  def json_update(json, attrs = {})
-
-  end
-
-end
 
 ActiveSupport.on_load(:active_record) do
-  ActiveRecord::Base.public_send(:include, JsonbAccessor)
+  ActiveRecord::Base.public_send(:include, AtomicJson::Updater)
 end

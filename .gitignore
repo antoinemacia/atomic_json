@@ -6,4 +6,7 @@
 /pkg/
 /spec/reports/
 /tmp/
-.idea/*
+
+.byebug_history
+# Editors
+.idea/

@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Antoine Macia"]
   spec.email         = ["antoine@discolabs.com"]
 
-  spec.summary       = "Update JSON & JSONB fields of AR models atomically"
+  spec.summary       = "Atomic update of JSONB fields for ActiveRecord models"
   spec.description   = ""
   spec.homepage      = ""
   spec.license       = "MIT"
@@ -29,4 +29,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "minitest", "~> 5.0"
   spec.add_development_dependency "rubocop", "~> 0.58.1"
+  spec.add_development_dependency "byebug", "~> 10.0.2"
+  spec.add_development_dependency "standalone_migrations", "~> 5.2.5"
+  spec.add_development_dependency "factory_bot", "~> 4.0"
 end
