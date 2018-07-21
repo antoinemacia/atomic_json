@@ -30,10 +30,4 @@ class AtomicJsonTest < Minitest::Test
     assert_equal false, @order.reload.data['boolean_field']
   end
 
-  def test_update_jsonb_non_exisiting_field_raise_error
-    assert_raises(AtomicJson::Updater::InvalidColumnError) do
-      @order.jsonb_update!(:no_data, int_field: 4)
-    end
-  end
-
 end

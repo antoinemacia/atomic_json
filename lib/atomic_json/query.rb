@@ -7,12 +7,13 @@ module AtomicJson
 
     class QueryError < StandardError; end
 
-    attr_reader :record, :jsonb_field
+    attr_reader :record, :jsonb_field, :create_missing
     attr_accessor :query
 
-    def initialize(record, jsonb_field)
+    def initialize(record, jsonb_field, create_missing)
       @record = record
       @jsonb_field = jsonb_field
+      @create_missing = create_missing
     end
 
     def build(attributes)
@@ -27,10 +28,6 @@ module AtomicJson
       self
     end
 
-    def parse
-      self
-    end
-
     def run!
       ActiveRecord::Base.connection.execute(query)
     rescue ActiveRecord::StatementInvalid => e
@@ -42,12 +39,9 @@ module AtomicJson
       def single_update_query(key, value)
         <<~SQL
           UPDATE #{record.class.table_name}
-          SET #{jsonb_field} = jsonb_set(#{jsonb_field}, '{#{key}}', #{type_matcher(value)}, #{CREATE_NEW_COLUMN})
+          SET #{jsonb_field} = jsonb_set(#{jsonb_field}, '{#{key}}', #{type_matcher(value)}, #{create_missing})
           WHERE id = #{record.id};
         SQL
-      end
-
-      def multi_update_query(hash)
       end
 
       def type_matcher(value)
