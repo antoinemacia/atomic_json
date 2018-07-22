@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bbf7d64a-681e-4bb2-b41f-ce647a649fe4" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/atomic_json/query.rb" afterPath="$PROJECT_DIR$/lib/atomic_json/query.rb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/factories.rb" afterPath="$PROJECT_DIR$/test/factories.rb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/updater_test.rb" afterPath="$PROJECT_DIR$/test/updater_test.rb" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -37,11 +36,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="updater_test.rb" pinned="false" current-in-tab="true">
+          <file leaf-file-name="updater_test.rb" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/test/updater_test.rb">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="257">
-                  <caret line="33" column="48" lean-forward="true" selection-start-line="33" selection-start-column="48" selection-end-line="33" selection-end-column="48" />
+                <state relative-caret-position="410">
+                  <caret line="42" column="45" lean-forward="true" selection-start-line="42" selection-start-column="45" selection-end-line="42" selection-end-column="45" />
                   <folding />
                 </state>
               </provider>
@@ -50,8 +49,8 @@
           <file leaf-file-name="query.rb" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/lib/atomic_json/query.rb">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="344">
-                  <caret line="63" column="26" lean-forward="false" selection-start-line="63" selection-start-column="26" selection-end-line="63" selection-end-column="26" />
+                <state relative-caret-position="382">
+                  <caret line="68" column="3" lean-forward="true" selection-start-line="68" selection-start-column="3" selection-end-line="68" selection-end-column="3" />
                   <folding />
                 </state>
               </provider>
@@ -77,21 +76,21 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="atomic_json_benchmark.rb" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/test/atomic_json_benchmark.rb">
+          <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/.gitignore">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="377">
-                  <caret line="31" column="21" lean-forward="false" selection-start-line="31" selection-start-column="21" selection-end-line="31" selection-end-column="21" />
+                <state relative-caret-position="204">
+                  <caret line="12" column="0" lean-forward="true" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
                   <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="atomic_json.gemspec" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/atomic_json.gemspec">
+          <file leaf-file-name="atomic_json_benchmark.rb" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/test/atomic_json_benchmark.rb">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="367">
-                  <caret line="34" column="0" lean-forward="false" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
+                <state relative-caret-position="377">
+                  <caret line="31" column="21" lean-forward="false" selection-start-line="31" selection-start-column="21" selection-end-line="31" selection-end-column="21" />
                   <folding />
                 </state>
               </provider>
@@ -160,10 +159,10 @@
         <option value="$PROJECT_DIR$/lib/atomic_json/version.rb" />
         <option value="$PROJECT_DIR$/lib/atomic_json/type_validation.rb" />
         <option value="$PROJECT_DIR$/lib/atomic_json/updater.rb" />
-        <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/test/factories.rb" />
         <option value="$PROJECT_DIR$/lib/atomic_json/query.rb" />
         <option value="$PROJECT_DIR$/test/updater_test.rb" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -260,7 +259,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="6633000" />
+    <option name="totallyTimeSpent" value="6742000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="828" extended-state="6" />
@@ -621,13 +620,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="9" lean-forward="true" selection-start-line="10" selection-start-column="9" selection-end-line="10" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/.rbenv/versions/2.3.3/lib/ruby/gems/2.3.0/gems/activerecord-5.1.4/lib/active_record/connection_adapters/abstract/quoting.rb">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-179">
@@ -662,18 +654,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/atomic_json/query.rb">
+    <entry file="file://$PROJECT_DIR$/test/updater_test.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="344">
-          <caret line="63" column="26" lean-forward="false" selection-start-line="63" selection-start-column="26" selection-end-line="63" selection-end-column="26" />
+        <state relative-caret-position="410">
+          <caret line="42" column="45" lean-forward="true" selection-start-line="42" selection-start-column="45" selection-end-line="42" selection-end-column="45" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/updater_test.rb">
+    <entry file="file://$PROJECT_DIR$/lib/atomic_json/query.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="257">
-          <caret line="33" column="48" lean-forward="true" selection-start-line="33" selection-start-column="48" selection-end-line="33" selection-end-column="48" />
+        <state relative-caret-position="382">
+          <caret line="68" column="3" lean-forward="true" selection-start-line="68" selection-start-column="3" selection-end-line="68" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="0" lean-forward="true" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
           <folding />
         </state>
       </provider>
