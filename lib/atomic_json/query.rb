@@ -18,8 +18,7 @@ module AtomicJson
     def build(attributes)
       self.query = case attributes.keys.count
       when 0 then nil
-      when 1
-        single_update_query(attributes.keys.first, attributes.values.first)
+      when 1 then single_update_query(attributes.keys.first, attributes.values.first)
       else multi_update_query(attributes)
       end
       self
@@ -56,6 +55,8 @@ module AtomicJson
       def jsonb_quote_value(value)
         case value
         when String then "'\"#{connection.quote_string(value)}\"'"
+        when Date, Time then "'\"#{value.iso8601}\"'"
+        when nil then %('null')
         else %('#{value}')
         end
       end
