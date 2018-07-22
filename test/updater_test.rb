@@ -20,6 +20,21 @@ class AtomicJsonTest < Minitest::Test
     assert_equal 4, @order.reload.data['int_field']
   end
 
+  def test_update_jsonb_top_level_date_field
+    @order.jsonb_update!(:data, timestamp: Date.parse('2018/08/12'))
+    assert_equal '2018-08-12', @order.reload.data['timestamp']
+  end
+
+  def test_update_jsonb_top_level_time_field
+    @order.jsonb_update!(:data, timestamp: Time.parse('2018/08/12 10:00 UTC'))
+    assert_equal '2018-08-12T10:00:00Z', @order.reload.data['timestamp']
+  end
+
+  def test_update_jsonb_top_level_nil_field
+    @order.jsonb_update!(:data, null_field: nil)
+    assert_nil@order.reload.data['null_field']
+  end
+
   def test_update_jsonb_top_level_array_field
     @order.jsonb_update!(:data, array_field: [10, 12, 'asa'])
     assert_equal [10, 12, 'asa'], @order.reload.data['array_field']

@@ -6,7 +6,6 @@ module AtomicJson
     class Error < StandardError; end
 
     ERRORS = {
-      field: 'Field to update must be a string or symbol',
       attributes: 'Attributes to update must be a hash',
       column: 'ActiveRecord column needs to be of type JSONB'
     }
@@ -26,10 +25,6 @@ module AtomicJson
     end
 
     private
-
-      def valid_field_type?
-        field.is_a?(String) || field.is_a?(Symbol)
-      end
 
       def valid_column_type?
         record.type_for_attribute(field.to_s).type == :jsonb

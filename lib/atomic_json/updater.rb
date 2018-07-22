@@ -11,7 +11,7 @@ module AtomicJson
 
         Query.new(self, field, create_missing)
           .build(attributes)
-          .run!
+          .execute!
       end
     end
 
