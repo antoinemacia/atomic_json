@@ -35,6 +35,11 @@ class AtomicJsonTest < Minitest::Test
     assert_nil@order.reload.data['null_field']
   end
 
+  def test_update_jsonb_top_level_json_field
+    @order.jsonb_update!(:data, json_field: { another_json: true })
+    assert_equal({ another_json: true }.as_json, @order.reload.data['json_field'])
+  end
+
   def test_update_jsonb_top_level_array_field
     @order.jsonb_update!(:data, array_field: [10, 12, 'asa'])
     assert_equal [10, 12, 'asa'], @order.reload.data['array_field']

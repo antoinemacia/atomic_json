@@ -8,6 +8,7 @@ FactoryBot.define do
         boolean_field: true,
         null_field: nil,
         timestamp: '',
+        json_field: nil,
         nested_field: {
           nested_one: "I'm nested"
         }
