@@ -57,13 +57,7 @@ module AtomicJson
       end
 
       def jsonb_quote_value(value)
-        case value
-        when String then "'\"#{connection.quote_string(value)}\"'"
-        when Date, Time then "'\"#{value.iso8601}\"'"
-        when nil then %('null')
-        when Hash then %('#{value.to_json}')
-        else %('#{value}')
-        end
+        %('#{value.to_json}')
       end
     end
 end
