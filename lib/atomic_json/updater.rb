@@ -5,7 +5,7 @@ module AtomicJson
     extend ActiveSupport::Concern
 
     included do
-      def jsonb_update!(field, attributes = {}, create_missing = false)
+      def jsonb_update_columns(field, attributes = {}, create_missing = false)
         TypeValidation.new(self, field, attributes)
           .validate_types!
 
