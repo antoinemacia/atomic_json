@@ -10,7 +10,11 @@ FactoryBot.define do
         timestamp: '',
         json_field: nil,
         nested_field: {
-          nested_one: "I'm nested"
+          nested_one: {
+            nested_two: nil,
+            nested_three: 'hey',
+            nested_four: 'yo'
+          }
         }
       }
     }

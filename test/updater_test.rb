@@ -36,7 +36,7 @@ class AtomicJsonTest < Minitest::Test
   end
 
   def test_update_jsonb_top_level_json_field
-    @order.jsonb_update_columns(:data, json_field: { another_json: true })
+    @order.jsonb_update_columns(:data, { json_field: { another_json: true } }, nested: false)
     assert_equal({ another_json: true }.as_json, @order.reload.data['json_field'])
   end
 
@@ -51,16 +51,23 @@ class AtomicJsonTest < Minitest::Test
   end
 
   def test_update_jsonb_nested_field
-    nested_json = {
+    @order.jsonb_update_columns(:data,
       nested_field: {
         nested_one: {
-          nested_two: nil,
-          nested_three: 'hey'
+          nested_two: 'salut!'
         }
       }
-    }
-    @order.jsonb_update_columns(:data, nested_json)
-    assert_equal(nested_json[:nested_field].as_json, @order.reload.data['nested_field'])
+    )
+    assert_equal(
+      {
+        nested_one: {
+          nested_two: 'salut!',
+          nested_three: 'hey',
+          nested_four: 'yo'
+        }
+      }.as_json,
+      @order.reload.data['nested_field']
+    )
   end
 
 end
