@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 require 'active_support/core_ext/hash/reverse_merge'
+require 'atomic_json/json_quote'
 
 module AtomicJson
   class Query
 
     class QueryError < StandardError; end
+
+    include AtomicJson::JsonQuote
 
     ##
     # create_missing - create new key value if not exisiting, default to false
@@ -15,7 +18,7 @@ module AtomicJson
     }
 
     attr_reader :record, :jsonb_field, :connection, :options
-    attr_accessor :query
+    attr_accessor :query_string
 
     def initialize(record, jsonb_field, options = {})
       @connection = ActiveRecord::Base.connection
@@ -34,7 +37,7 @@ module AtomicJson
     end
 
     def execute!
-      connection.exec_update(query)
+      connection.exec_update(query_string)
     rescue ActiveRecord::StatementInvalid => e
       raise QueryError, e.message
     end
@@ -48,7 +51,7 @@ module AtomicJson
       def single_update_query(attributes)
         keys, value = keys_and_value(attributes)
 
-        self.query = build_query(keys, value)
+        self.query_string = build_query(keys, value)
       end
 
       def build_query(keys, value)
@@ -84,14 +87,6 @@ module AtomicJson
           val = attributes.values.first
         end
         [keys, val]
-      end
-
-      def jsonb_quote_keys(keys)
-        "'{#{keys.map(&:to_s).join(',')}}'"
-      end
-
-      def jsonb_quote_value(value)
-        %('#{value.to_json}')
       end
 
   end
