@@ -9,7 +9,7 @@ module AtomicJson
         TypeValidation.new(self, field, attributes)
           .validate_types!
 
-        Query.new(self, field, options)
+        SingleUpdate.new(self, field, options)
           .build(attributes)
           .execute!
       end

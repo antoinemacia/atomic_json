@@ -11,5 +11,9 @@ module AtomicJson
       %('#{value.to_json}')
     end
 
+    def jsonb_quote_boolean(bool)
+      bool
+    end
+
   end
 end
