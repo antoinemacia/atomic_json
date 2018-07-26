@@ -1,19 +1,27 @@
 # frozen_string_literal: true
+require 'active_support/core_ext/hash/reverse_merge'
 
 module AtomicJson
   class Query
 
     class QueryError < StandardError; end
 
-    attr_reader :record, :jsonb_field, :create_missing, :connection, :options
+    ##
+    # create_missing - create new key value if not exisiting, default to false
+    # nested - Allow nested JSON update, default to true
+    DEFAULT_OPTIONS = {
+      create_missing: false,
+      nested: true
+    }
+
+    attr_reader :record, :jsonb_field, :connection, :options
     attr_accessor :query
 
-    def initialize(record, jsonb_field, create_missing, options = {})
+    def initialize(record, jsonb_field, options = {})
       @connection = ActiveRecord::Base.connection
       @record = record
       @jsonb_field = jsonb_field
-      @create_missing = create_missing
-      @options = options
+      @options = options.reverse_merge!(DEFAULT_OPTIONS)
     end
 
     def build(attributes)
@@ -39,19 +47,20 @@ module AtomicJson
 
       def single_update_query(attributes)
         keys, value = keys_and_value(attributes)
+
         self.query = build_query(keys, value)
       end
 
       def build_query(keys, value)
         <<~SQL
-            UPDATE #{connection.quote_table_name(record.class.table_name)}
-            SET #{connection.quote_column_name(jsonb_field)} = jsonb_set(
-                  #{connection.quote_column_name(jsonb_field)},
-                  #{jsonb_quote_keys(keys)},
-                  #{jsonb_quote_value(value)},
-                  #{create_missing}
-                )
-            WHERE id = #{connection.quote(record.id)};
+          UPDATE #{connection.quote_table_name(record.class.table_name)}
+          SET #{connection.quote_column_name(jsonb_field)} = jsonb_set(
+                #{connection.quote_column_name(jsonb_field)},
+                #{jsonb_quote_keys(keys)},
+                #{jsonb_quote_value(value)},
+                #{options[:create_missing]}
+              )
+          WHERE id = #{connection.quote(record.id)};
         SQL
       end
 
@@ -60,29 +69,29 @@ module AtomicJson
       # array and keep the last value
       def keys_and_value(attributes)
         keys = []
-        value = loop do
-          key, values = attributes.flatten
-          keys << key.to_s
-          if values.is_a?(Hash)
-            attributes = values
-          else
-            break values
+        if options[:nested]
+          val = loop do
+            key, val = attributes.flatten
+            keys << key.to_s
+            if val.is_a?(Hash)
+              attributes = val
+            else
+              break val
+            end
           end
+        else
+          keys << attributes.keys.first
+          val = attributes.values.first
         end
-        [keys, value]
+        [keys, val]
       end
 
       def jsonb_quote_keys(keys)
-        "'{#{keys.join(',')}}'"
+        "'{#{keys.map(&:to_s).join(',')}}'"
       end
 
       def jsonb_quote_value(value)
-        case value
-        when String then "'\"#{connection.quote_string(value)}\"'"
-        when Date, Time then "'\"#{value.iso8601}\"'"
-        when nil then %('null')
-        else %('#{value}')
-        end
+        %('#{value.to_json}')
       end
 
   end
