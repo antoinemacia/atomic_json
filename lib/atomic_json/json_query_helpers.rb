@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module AtomicJson
-  module JsonQuote
+  module JsonQueryHelpers
 
     def jsonb_quote_keys(keys)
       "'{#{keys.map(&:to_s).join(',')}}'"
@@ -13,6 +13,10 @@ module AtomicJson
 
     def jsonb_quote_boolean(bool)
       bool
+    end
+
+    def update_via_concatenation(jsonb_field, keys, value)
+      "#{jsonb_field}->#{keys.map { |x| quote(x) }.join('->')} || #{jsonb_quote_value(value)}"
     end
 
   end

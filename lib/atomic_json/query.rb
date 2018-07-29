@@ -1,13 +1,12 @@
 # frozen_string_literal: true
-require 'active_support/core_ext/hash/reverse_merge'
-require 'atomic_json/json_quote'
+require 'atomic_json/json_query_helpers'
 
 module AtomicJson
   class Query
 
     class QueryError < StandardError; end
 
-    include AtomicJson::JsonQuote
+    include AtomicJson::JsonQueryHelpers
 
     ##
     # create_missing - create new key value if not exisiting, default to false
@@ -26,7 +25,7 @@ module AtomicJson
       @connection = ActiveRecord::Base.connection
       @record = record
       @jsonb_field = jsonb_field
-      @options = options.reverse_merge!(DEFAULT_OPTIONS)
+      @options = DEFAULT_OPTIONS.merge(options)
     end
 
     def build(_attributes)
@@ -37,6 +36,10 @@ module AtomicJson
       connection.exec_update(query_string)
     rescue ActiveRecord::StatementInvalid => e
       raise QueryError, e.message
+    end
+
+    def to_s
+      query_string
     end
 
     private

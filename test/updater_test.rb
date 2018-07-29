@@ -54,7 +54,8 @@ class AtomicJsonTest < Minitest::Test
     @order.jsonb_update_columns(:data,
       nested_field: {
         nested_one: {
-          nested_two: 'salut!'
+          nested_two: 'salut!',
+          nested_three: 'pouet!'
         }
       }
     )
@@ -62,7 +63,7 @@ class AtomicJsonTest < Minitest::Test
       {
         nested_one: {
           nested_two: 'salut!',
-          nested_three: 'hey',
+          nested_three: 'pouet!',
           nested_four: 'yo'
         }
       }.as_json,

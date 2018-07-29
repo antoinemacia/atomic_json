@@ -1,6 +1,4 @@
 # frozen_string_literal: true
-require 'active_support/core_ext/hash/reverse_merge'
-require 'atomic_json/json_quote'
 
 module AtomicJson
   class SingleUpdate < Query
@@ -20,7 +18,7 @@ module AtomicJson
           SET #{quote_column_name(jsonb_field)} = jsonb_set(
                 #{quote_column_name(jsonb_field)},
                 #{jsonb_quote_keys(keys)},
-                #{jsonb_quote_value(value)},
+                #{define_update_type(keys, value)},
                 #{jsonb_quote_boolean(options[:create_missing])}
               )
           WHERE id = #{quote(record.id)};
@@ -44,11 +42,19 @@ module AtomicJson
         val = loop do
           key, val = attributes.flatten
           keys << key.to_s
-          break val unless val.is_a?(Hash)
+          break val unless val.is_a?(Hash) && val.keys.count == 1
           attributes = val
         end
 
         [keys, val]
+      end
+
+      def define_update_type(keys, value)
+        if value.is_a?(Hash) && value.keys.count > 1
+          update_via_concatenation(jsonb_field, keys, value)
+        else
+          jsonb_quote_value(value)
+        end
       end
 
   end
