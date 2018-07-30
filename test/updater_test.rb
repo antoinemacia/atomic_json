@@ -26,18 +26,13 @@ class AtomicJsonTest < Minitest::Test
   end
 
   def test_update_jsonb_top_level_time_field
-    @order.jsonb_update_column(:data, timestamp: Time.parse('2018/08/12 10:00 UTC'))
+    @order.jsonb_update_column(:data, timestamp: Time.parse('2018/08/12 10:00 UTC') )
     assert_equal '2018-08-12T10:00:00.000Z', @order.reload.data['timestamp']
   end
 
   def test_update_jsonb_top_level_nil_field
     @order.jsonb_update_column(:data, null_field: nil)
     assert_nil @order.reload.data['null_field']
-  end
-
-  def test_update_jsonb_top_level_json_field
-    @order.jsonb_update_column(:data, { json_field: { another_json: true } }, nested: false)
-    assert_equal({ another_json: true }.as_json, @order.reload.data['json_field'])
   end
 
   def test_update_jsonb_top_level_array_field
@@ -48,6 +43,17 @@ class AtomicJsonTest < Minitest::Test
   def test_update_jsonb_top_level_boolean_field
     @order.jsonb_update_column(:data, boolean_field: false)
     assert_equal false, @order.reload.data['boolean_field']
+  end
+
+  def test_update_jsonb_multiple_top_level_keys
+    @order.jsonb_update_column(:data,
+      {
+        timestamp: Time.parse('2018/08/12 10:00 UTC'),
+        null_field: nil
+      }
+    )
+    assert_equal '2018-08-12T10:00:00.000Z', @order.reload.data['timestamp']
+    assert_nil @order.reload.data['null_field']
   end
 
   def test_update_jsonb_nested_field

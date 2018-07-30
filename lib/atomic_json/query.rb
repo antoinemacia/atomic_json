@@ -11,10 +11,8 @@ module AtomicJson
 
     ##
     # create_missing - create new key value if not exisiting, default to false
-    # nested - Allow nested JSON update, default to true
     DEFAULT_OPTIONS = {
       create_missing: false,
-      nested: true
     }
 
     attr_reader :record, :jsonb_field, :connection, :options
@@ -30,9 +28,11 @@ module AtomicJson
     end
 
     def build(attributes)
-      self.query_string = build_query_string(
-        *keys_and_value(attributes)
-      )
+      self.query_string = <<~SQL
+        UPDATE #{quote_table_name(record.class.table_name)}
+        SET #{quote_column_name(jsonb_field)} = #{jsonb_data(attributes)}
+        WHERE id = #{quote(record.id)};
+      SQL
       self
     end
 
@@ -48,24 +48,11 @@ module AtomicJson
 
     private
 
-      def build_query_string(keys, value)
-        <<~SQL
-          UPDATE #{quote_table_name(record.class.table_name)}
-          SET #{quote_column_name(jsonb_field)} = jsonb_set(
-                #{quote_column_name(jsonb_field)},
-                #{jsonb_quote_keys(keys)},
-                #{value_by_update_type(keys, value)},
-                #{options[:create_missing]}
-              )
-          WHERE id = #{quote(record.id)};
-        SQL
-      end
-
-      def keys_and_value(attributes)
-        if options[:nested]
-          traverse_nested_hash(attributes)
-        else
-          [[attributes.keys.first], attributes.values.first]
+      def jsonb_data(attributes, data = jsonb_field)
+        loop do
+          keys, value = traverse_nested_hash(Hash[*attributes.shift])
+          data = jsonb_set_query_string(data, keys, value)
+          break data if attributes.empty?
         end
       end
 
@@ -83,6 +70,17 @@ module AtomicJson
         end
 
         [keys, val]
+      end
+
+      def jsonb_set_query_string(data, keys, value)
+        <<~EOF
+          jsonb_set(
+            #{data},
+            #{jsonb_quote_keys(keys)},
+            #{value_by_update_type(keys, value)},
+            #{options[:create_missing]}
+          )::jsonb
+        EOF
       end
 
       def value_by_update_type(keys, value)

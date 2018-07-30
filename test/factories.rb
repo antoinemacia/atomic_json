@@ -6,7 +6,7 @@ FactoryBot.define do
         int_field: 1,
         array_field: [1, 3, 'string'],
         boolean_field: true,
-        null_field: nil,
+        null_field: 'Obviously not null',
         timestamp: '',
         json_field: nil,
         nested_field: {
