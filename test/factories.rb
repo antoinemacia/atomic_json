@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :order do
-    data {
+    data do
       {
         string_field: 'Salut',
         int_field: 1,
@@ -17,6 +17,6 @@ FactoryBot.define do
           }
         }
       }
-    }
+    end
   end
 end
