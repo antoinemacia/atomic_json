@@ -27,10 +27,10 @@ module AtomicJson
       @options = DEFAULT_OPTIONS.merge(options)
     end
 
-    def build(attributes)
+    def build(payload)
       self.query_string = <<~SQL
         UPDATE #{quote_table_name(record.class.table_name)}
-        SET #{quote_column_name(jsonb_field)} = #{jsonb_data(attributes)}
+        SET #{quote_column_name(jsonb_field)} = #{jsonb_deep_merge(payload)}
         WHERE id = #{quote(record.id)};
       SQL
       self
@@ -48,18 +48,20 @@ module AtomicJson
 
     private
 
-      def jsonb_data(attributes, data = jsonb_field)
+      def jsonb_deep_merge(payload)
+        column = jsonb_field
         loop do
-          keys, value = traverse_nested_hash(Hash[*attributes.shift])
-          data = jsonb_set_query_string(data, keys, value)
-          break data if attributes.empty?
+          keys, value = traverse_hash(Hash[*payload.shift])
+          column = build_jsonb_set_query(column, keys, value)
+          break column if payload.empty?
         end
       end
 
       ##
-      # Traverse the attributes hash, aggregating all hash keys into an
-      # array and use the last child as value
-      def traverse_nested_hash(attributes)
+      # Traverse the attributes hash, incrementally
+      # aggregating all hash keys into an array
+      # and use the last child as value
+      def traverse_hash(attributes)
         keys = []
 
         val = loop do
@@ -72,10 +74,10 @@ module AtomicJson
         [keys, val]
       end
 
-      def jsonb_set_query_string(data, keys, value)
+      def build_jsonb_set_query(column, keys, value)
         <<~EOF
           jsonb_set(
-            #{data},
+            #{column}::jsonb,
             #{jsonb_quote_keys(keys)},
             #{value_by_update_type(keys, value)},
             #{options[:create_missing]}
@@ -84,7 +86,7 @@ module AtomicJson
       end
 
       def value_by_update_type(keys, value)
-        if multi_keys_update?(value)
+        if multiple_keys?(value)
           concatenation(jsonb_field, keys, value)
         else
           jsonb_quote_value(value)

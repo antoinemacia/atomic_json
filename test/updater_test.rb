@@ -61,15 +61,16 @@ class AtomicJsonTest < Minitest::Test
       nested_field: {
         nested_one: {
           nested_two: 'salut!',
-          nested_three: 'pouet!'
+          nested_three: 'hola!'
         }
       })
     assert_equal(
       {
         nested_one: {
           nested_two: 'salut!',
-          nested_three: 'pouet!',
-          nested_four: 'yo'
+          nested_three: 'hola!',
+          nested_four: 'yo',
+          nested_five: nil
         }
       }.as_json,
       @order.reload.data['nested_field']

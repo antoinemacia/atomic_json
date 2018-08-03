@@ -15,7 +15,7 @@ module AtomicJson
       "#{jsonb_field}->#{keys.map { |x| quote(x) }.join('->')} || #{jsonb_quote_value(value)}"
     end
 
-    def multi_keys_update?(value)
+    def multiple_keys?(value)
       value.is_a?(Hash) && value.keys.count > 1
     end
 

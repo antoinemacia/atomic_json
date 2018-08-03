@@ -13,8 +13,9 @@ FactoryBot.define do
           nested_one: {
             nested_two: nil,
             nested_three: 'hey',
-            nested_four: 'yo'
-          }
+            nested_four: 'yo',
+            nested_five: nil
+        }
         }
       }
     end

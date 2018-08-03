@@ -6,16 +6,16 @@ module AtomicJson
     class Error < StandardError; end
 
     ERRORS = {
-      attributes: 'Attributes to update must be a hash',
+      payload: 'Payload to update must be a hash',
       column: 'ActiveRecord column needs to be of type JSONB'
     }
 
-    attr_reader :record, :field, :attributes
+    attr_reader :record, :field, :payload
 
-    def initialize(record, field, attributes)
+    def initialize(record, field, payload)
       @record = record
       @field = field
-      @attributes = attributes
+      @payload = payload
     end
 
     def validate_types!
@@ -30,8 +30,8 @@ module AtomicJson
         record.type_for_attribute(field.to_s).type == :jsonb
       end
 
-      def valid_attributes_type?
-        attributes.is_a?(Hash)
+      def valid_payload_type?
+        payload.is_a?(Hash)
       end
 
   end
