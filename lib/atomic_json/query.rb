@@ -14,11 +14,10 @@ module AtomicJson
 
     delegate :quote_column_name, :quote_table_name, :quote, to: :connection
 
-    def initialize(record, jsonb_field, options = {})
+    def initialize(record, jsonb_field)
       @connection = ActiveRecord::Base.connection
       @record = record
       @jsonb_field = jsonb_field
-      @options = DEFAULT_OPTIONS.merge(options)
     end
 
     def build(payload)
