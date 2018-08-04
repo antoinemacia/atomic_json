@@ -26,7 +26,7 @@ class AtomicJsonTest < Minitest::Test
   end
 
   def test_update_jsonb_top_level_time_field
-    @order.jsonb_update_column(:data, timestamp: Time.parse('2018/08/12 10:00 UTC') )
+    @order.jsonb_update_column(:data, timestamp: Time.parse('2018/08/12 10:00 UTC'))
     assert_equal '2018-08-12T10:00:00.000Z', @order.reload.data['timestamp']
   end
 
@@ -61,7 +61,7 @@ class AtomicJsonTest < Minitest::Test
       nested_field: {
         nested_one: {
           nested_two: 'salut!',
-          nested_three: 'hola!'
+          nested_three: 'hola!',
         }
       })
     assert_equal(

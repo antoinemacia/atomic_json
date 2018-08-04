@@ -9,13 +9,7 @@ module AtomicJson
 
     include AtomicJson::QueryHelpers
 
-    ##
-    # create_missing - create new key value if not exisiting, default to false
-    DEFAULT_OPTIONS = {
-      create_missing: false,
-    }
-
-    attr_reader :record, :jsonb_field, :connection, :options
+    attr_reader :record, :jsonb_field, :connection
     attr_accessor :query_string
 
     delegate :quote_column_name, :quote_table_name, :quote, to: :connection
@@ -48,20 +42,19 @@ module AtomicJson
 
     private
 
-      def jsonb_deep_merge(payload)
-        column = jsonb_field
+      def jsonb_deep_merge(payload, column = jsonb_field)
         loop do
-          keys, value = traverse_hash(Hash[*payload.shift])
+          keys, value = traverse_payload(Hash[*payload.shift])
           column = build_jsonb_set_query(column, keys, value)
           break column if payload.empty?
         end
       end
 
       ##
-      # Traverse the attributes hash, incrementally
+      # Traverse the Hash payload, incrementally
       # aggregating all hash keys into an array
       # and use the last child as value
-      def traverse_hash(attributes)
+      def traverse_payload(attributes)
         keys = []
 
         val = loop do
@@ -79,13 +72,12 @@ module AtomicJson
           jsonb_set(
             #{column}::jsonb,
             #{jsonb_quote_keys(keys)},
-            #{value_by_update_type(keys, value)},
-            #{options[:create_missing]}
+            #{value(keys, value)}
           )::jsonb
         EOF
       end
 
-      def value_by_update_type(keys, value)
+      def value(keys, value)
         if multiple_keys?(value)
           concatenation(jsonb_field, keys, value)
         else
