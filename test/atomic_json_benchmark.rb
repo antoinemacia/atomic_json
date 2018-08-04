@@ -32,4 +32,5 @@ class AtomicJsonBenchmark < Minitest::Benchmark
       @order.jsonb_update_columns(:data, string_field: 'Hello')
     end
   end
+
 end
