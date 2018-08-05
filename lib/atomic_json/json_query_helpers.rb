@@ -19,5 +19,13 @@ module AtomicJson
       value.is_a?(Hash) && value.keys.count > 1
     end
 
+    def json_column_type?(record, column)
+      record.type_for_attribute(column.to_s).type == :jsonb
+    end
+
+    def valid_payload_type?(payload)
+      payload.is_a?(Hash)
+    end
+
   end
 end

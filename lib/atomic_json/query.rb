@@ -6,6 +6,7 @@ module AtomicJson
   class Query
 
     class Error < StandardError; end
+    class TypeError < Error; end
 
     include AtomicJson::JsonQueryHelpers
 
@@ -48,6 +49,7 @@ module AtomicJson
 
       def json_updates_agg(hash)
         hash.map do |column, payload|
+          validate_input!(column, payload)
           "#{quote_column_name(column)} = #{json_deep_merge(column, payload)}"
         end
       end
@@ -85,6 +87,10 @@ module AtomicJson
             #{multiple_values?(value) ? concatenation(target, keys, value) : jsonb_quote_value(value)}
           )::jsonb
         EOF
+      end
+
+      def validate_input!(column, payload)
+        raise TypeError unless json_column_type?(record, column) && valid_payload_type?(payload)
       end
   end
 end
