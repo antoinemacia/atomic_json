@@ -20,7 +20,7 @@ module AtomicJson
     end
 
     def json_column_type?(record, column)
-      record.type_for_attribute(column.to_s).type == :jsonb
+      %i[json jsonb].include?(record.type_for_attribute(column.to_s).type)
     end
 
     def valid_payload_type?(payload)

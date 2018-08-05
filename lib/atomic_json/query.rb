@@ -30,7 +30,7 @@ module AtomicJson
     end
 
     def execute!
-      connection.exec_update(query_string)
+      connection.exec_update(query_string, 'SQL')
     rescue ActiveRecord::StatementInvalid => e
       raise Error, e.message
     end
@@ -43,7 +43,7 @@ module AtomicJson
 
       def build_set_subquery(hash, touch)
         updates = json_updates_agg(hash)
-        updates << timestamp_update if touch
+        updates << timestamp_update if touch && record.has_attribute?(:updated_at)
         updates.join(',')
       end
 
@@ -55,7 +55,7 @@ module AtomicJson
       end
 
       def timestamp_update
-        "#{quote_column_name(:updated_at)} = #{Time.now}"
+        "#{quote_column_name(:updated_at)} = #{quote(Time.now)}"
       end
 
       def json_deep_merge(target, payload)
@@ -90,7 +90,8 @@ module AtomicJson
       end
 
       def validate_input!(column, payload)
-        raise TypeError unless json_column_type?(record, column) && valid_payload_type?(payload)
+        raise TypeError, 'Payload to update must be a hash' unless  valid_payload_type?(payload)
+        raise TypeError, 'ActiveRecord column needs to be of type JSON or JSONB' unless json_column_type?(record, column)
       end
   end
 end
