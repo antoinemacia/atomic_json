@@ -10,11 +10,11 @@ module AtomicJson
       column: 'ActiveRecord column needs to be of type JSONB'
     }
 
-    attr_reader :record, :field, :payload
+    attr_reader :record, :column, :payload
 
-    def initialize(record, field, payload)
+    def initialize(record, column, payload)
       @record = record
-      @field = field
+      @column = column
       @payload = payload
     end
 
@@ -27,7 +27,7 @@ module AtomicJson
     private
 
       def valid_column_type?
-        record.type_for_attribute(field.to_s).type == :jsonb
+        record.type_for_attribute(column.to_s).type == :jsonb
       end
 
       def valid_payload_type?
