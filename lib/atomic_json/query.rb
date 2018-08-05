@@ -5,25 +5,25 @@ require 'atomic_json/query_helpers'
 module AtomicJson
   class Query
 
-    class QueryError < StandardError; end
+    class Error < StandardError; end
 
     include AtomicJson::QueryHelpers
 
-    attr_reader :record, :jsonb_field, :connection
+    attr_reader :record, :column, :connection
     attr_accessor :query_string
 
     delegate :quote_column_name, :quote_table_name, :quote, to: :connection
 
-    def initialize(record, jsonb_field)
+    def initialize(record, column)
       @connection = ActiveRecord::Base.connection
+      @column = column
       @record = record
-      @jsonb_field = jsonb_field
     end
 
     def build(payload)
       self.query_string = <<~SQL
         UPDATE #{quote_table_name(record.class.table_name)}
-        SET #{quote_column_name(jsonb_field)} = #{jsonb_deep_merge(payload)}
+        SET #{quote_column_name(column)} = #{jsonb_deep_merge(payload)}
         WHERE id = #{quote(record.id)};
       SQL
       self
@@ -32,7 +32,7 @@ module AtomicJson
     def execute!
       connection.exec_update(query_string)
     rescue ActiveRecord::StatementInvalid => e
-      raise QueryError, e.message
+      raise Error, e.message
     end
 
     def to_s
@@ -41,11 +41,11 @@ module AtomicJson
 
     private
 
-      def jsonb_deep_merge(payload, column = jsonb_field)
+      def jsonb_deep_merge(payload, target = column)
         loop do
           keys, value = traverse_payload(Hash[*payload.shift])
-          column = build_jsonb_set_query(column, keys, value)
-          break column if payload.empty?
+          target = build_jsonb_set_query(target, keys, value)
+          break target if payload.empty?
         end
       end
 
@@ -66,10 +66,10 @@ module AtomicJson
         [keys, val]
       end
 
-      def build_jsonb_set_query(column, keys, value)
+      def build_jsonb_set_query(target, keys, value)
         <<~EOF
           jsonb_set(
-            #{column}::jsonb,
+            #{target}::jsonb,
             #{jsonb_quote_keys(keys)},
             #{value(keys, value)}
           )::jsonb
@@ -78,7 +78,7 @@ module AtomicJson
 
       def value(keys, value)
         if multiple_keys?(value)
-          concatenation(jsonb_field, keys, value)
+          concatenation(column, keys, value)
         else
           jsonb_quote_value(value)
         end

@@ -27,9 +27,9 @@ class AtomicJsonBenchmark < Minitest::Benchmark
     end
   end
 
-  def bench_jsonb_update_columns
+  def bench_json_update_columns
     assert_performance_linear 0 do
-      @order.jsonb_update_columns(:data, string_field: 'Hello')
+      @order.json_update_columns(:data, string_field: 'Hello')
     end
   end
 
