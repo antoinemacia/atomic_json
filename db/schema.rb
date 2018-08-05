@@ -16,7 +16,10 @@ ActiveRecord::Schema.define(version: 20180715062407) do
   enable_extension "plpgsql"
 
   create_table "orders", force: :cascade do |t|
-    t.jsonb "data"
+    t.jsonb "jsonb_data"
+    t.json "json_data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end

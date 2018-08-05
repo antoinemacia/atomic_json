@@ -5,13 +5,28 @@ module AtomicJson
 
     extend ActiveSupport::Concern
 
-    included do
-      def jsonb_update_column(field, payload = {}, options = {})
-        TypeValidation.new(self, field, payload).validate_types!
-        Query.new(self, field, options)
-          .build(payload)
+    def json_update(payload)
+      run_callbacks(:save) do
+        Query.new(self)
+          .build(payload, touch: true)
           .execute!
+        reload.validate
       end
+    end
+
+    def json_update!(payload)
+      run_callbacks(:save) do
+        Query.new(self)
+          .build(payload, touch: true)
+          .execute!
+        reload.validate!
+      end
+    end
+
+    def json_update_columns(payload)
+      Query.new(self)
+        .build(payload)
+        .execute!
     end
 
   end
