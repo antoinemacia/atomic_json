@@ -1,31 +1,33 @@
 # frozen_string_literal: true
 
+require 'atomic_json/query'
+
 module AtomicJson
   module Updater
 
     extend ActiveSupport::Concern
 
-    def json_update(payload)
+    def json_update(input)
       run_callbacks(:save) do
         Query.new(self)
-          .build(payload, touch: true)
+          .build(input, touch: true)
           .execute!
         reload.validate
       end
     end
 
-    def json_update!(payload)
+    def json_update!(input)
       run_callbacks(:save) do
         Query.new(self)
-          .build(payload, touch: true)
+          .build(input, touch: true)
           .execute!
         reload.validate!
       end
     end
 
-    def json_update_columns(payload)
+    def json_update_columns(input)
       Query.new(self)
-        .build(payload)
+        .build(input)
         .execute!
     end
 
