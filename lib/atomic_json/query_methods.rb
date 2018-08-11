@@ -3,7 +3,7 @@
 require 'atomic_json/query'
 
 module AtomicJson
-  module Updater
+  module QueryMethods
 
     extend ActiveSupport::Concern
 
