@@ -5,34 +5,30 @@ require 'atomic_json/errors'
 module AtomicJson
   class Validator
 
-    attr_reader :record, :attributes
+    attr_reader :record
 
-    def initialize(record, attributes)
+    def initialize(record)
       @record = record
-      @attributes = attributes
     end
 
-    ##
-    # Validations taken from ActiveRecord::Persistence module
-    def validate_record!
-      raise Errors::ActiveRecordError, 'cannot update a new record' if record.new_record?
-      raise Errors::ActiveRecordError, 'cannot update a destroyed record' if record.destroyed?
-      self
-    end
-
-    def validate_attributes!
-      raise Errors::TypeError, 'Payload to update must be a hash' unless valid_payload_type?
-      attributes.each_key do |key|
-        raise Errors::ReadOnlyAttributeError, "#{key} is marked as readonly" if read_only_attribute?(key)
-        raise Errors::InvalidColumnTypeError, 'ActiveRecord column needs to be of type JSON or JSONB' unless valid_column_type?(key)
-      end
-      self
+    def validate!(attributes)
+      validate_record!
+      validate_attributes!(attributes)
     end
 
     private
 
-      def valid_payload_type?
-        attributes.is_a?(Hash)
+      def validate_record!
+        raise ActiveRecordError, 'cannot update a new record' if record.new_record?
+        raise ActiveRecordError, 'cannot update a destroyed record' if record.destroyed?
+      end
+
+      def validate_attributes!(attributes)
+        raise TypeError, 'Payload to update must be a hash' unless attributes.is_a?(Hash)
+        attributes.each_key do |key|
+          raise ReadOnlyAttributeError, "#{key} is marked as readonly" if read_only_attribute?(key)
+          raise InvalidColumnTypeError, 'ActiveRecord column needs to be of type JSON or JSONB' unless valid_column_type?(key)
+        end
       end
 
       def read_only_attribute?(key)

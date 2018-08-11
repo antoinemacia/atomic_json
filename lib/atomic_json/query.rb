@@ -11,18 +11,20 @@ module AtomicJson
 
     include AtomicJson::JsonQueryHelpers
 
-    attr_reader :record, :connection
+    attr_reader :record, :connection, :validator
     attr_accessor :query_string
 
     delegate :quote_column_name, :quote_table_name, :quote, to: :connection
+    delegate :validate!, to: :validator
 
     def initialize(record)
       @connection = ActiveRecord::Base.connection
+      @validator = Validator.new(record)
       @record = record
     end
 
     def build(attributes, touch: false)
-      run_validations!(attributes)
+      validate!(attributes)
       self.query_string = <<~SQL
         UPDATE #{quote_table_name(record.class.table_name)}
         SET #{build_set_subquery(attributes, touch)}
@@ -42,12 +44,6 @@ module AtomicJson
     end
 
     private
-
-      def run_validations!(input)
-        Validator.new(record, input)
-          .validate_record!
-          .validate_attributes!
-      end
 
       def build_set_subquery(attributes, touch)
         updates = json_updates_agg(attributes)
