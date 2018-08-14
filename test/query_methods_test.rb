@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class UpdaterTest < Minitest::Test
+class QueryMethodsTest < Minitest::Test
 
   def setup
     @order = create(:order)
