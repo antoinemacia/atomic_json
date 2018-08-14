@@ -1,8 +1,10 @@
 # AtomicJson
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/atomic_json`. To experiment with that code, run `bin/console` for an interactive prompt.
+Expose a simple set of methods to allow fast atomic updates of `json`/`jsonb` columns of ActiveRecord models using PostgresQL `jsonb_set` [function](https://www.postgresql.org/docs/9.5/static/functions-json.html) 
 
-TODO: Delete this and the text above, and describe your gem
+- Support updates of `json` and `jsonb` columns
+- Support update of deeply nested fields
+- Support update of multiple fields at once
 
 ## Installation
 
@@ -14,25 +16,67 @@ gem 'atomic_json'
 
 And then execute:
 
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install atomic_json
+    $ bundle install
 
 ## Usage
 
-TODO: Write usage instructions here
+To update a `json` or `jsonb` column, simply pass a Hash to the bellow method call, 
+using the column name as top level key and a nested hash of the value(s) you're willing to update
 
-## Development
+Only the fields you've specified will be updated
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+``` 
+order.data
+=> { amount: 50.00, first_name: 'Milkpie', last_name: 'Starlord' }
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+order.jsonb_update(data: { amount: 10.00 })
+
+order.data
+=> { amount: 10.00, first_name: 'Milkpie', last_name: 'Starlord' }
+``` 
+
+For the sake of simplicity, AtomicJson mimic the behavior of standard ActiveRecord query methods to update database fields
+
+### jsonb_update_columns
+
+Same as ActiveRecord `update_columns`, this method will make a straight database update
+- Validations are skipped
+- Callbacks are skipped
+- `updated_at` is not updated
+
+```
+order.jsonb_update_columns(data: { paid: false })
+=> true
+```
+
+### jsonb_update
+
+Same as ActiveRecord `update`, this method will
+- Invoke validations
+- Invoke callbacks
+- Touch record `updated_at`
+
+```
+order.jsonb_update(data: { paid: false, product_id: 3772389212 })
+=> false
+```
+
+### jsonb_update!
+
+Same as the above `json_update!`, but will raise an `ActiveRecord::RecordInvalid` exception 
+if a custom validation fails
+
+```
+order.jsonb_update!(data: { paid: false, product_id: 3772389212 })
+=> ActiveRecord::RecordInvalid Exception: Validation failed: data product_id can't be changed
+```
+## Todo's
+
+- Support update of `json`/`jsonb` arrays via index and key/value id
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/atomic_json.
+Bug reports and pull requests are welcome on GitHub at https://github.com/Legsman/atomic_json.
 
 ## License
 
