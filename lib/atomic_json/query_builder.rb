@@ -65,11 +65,11 @@ module AtomicJson
 
       def jsonb_set_query_string(target, keys, value)
         <<~EOF
-            jsonb_set(
-              #{target}::jsonb,
-              #{jsonb_quote_keys(keys)},
-              #{multi_value_hash?(value) ? concatenation(target, keys, value) : jsonb_quote_value(value)}
-            )::jsonb
+          jsonb_set(
+            #{target}::jsonb,
+            #{jsonb_quote_keys(keys)},
+            #{multi_value_hash?(value) ? concatenation(target, keys, value) : jsonb_quote_value(value)}
+          )::jsonb
         EOF
       end
 

@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Antoine Macia']
   spec.email         = ['antoine@discolabs.com']
 
-  spec.summary       = 'Atomic update of JSONB fields for ActiveRecord models'
+  spec.summary       = 'Atomic update of JSON/JSONB fields for ActiveRecord models'
   spec.description   = ''
   spec.homepage      = ''
   spec.license       = 'MIT'
