@@ -23,13 +23,13 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_dependency 'activerecord', '>= 5.0'
-  spec.add_dependency 'activesupport', '>= 5.0'
-  spec.add_dependency 'pg', '>= 0.18.1'
-  spec.add_development_dependency 'bundler', '~> 1.16.a'
-  spec.add_development_dependency 'byebug', '~> 10.0.2'
+  spec.add_runtime_dependency 'activesupport', '~> 5.0'
+  spec.add_runtime_dependency 'pg', '~> 0.18', '>= 0.18.1'
+  spec.add_development_dependency 'bundler', '~> 1.16'
+  spec.add_development_dependency 'byebug', '~> 10.0', '>= 10.0.2'
   spec.add_development_dependency 'factory_bot', '~> 4.0'
   spec.add_development_dependency 'minitest', '~> 5.0'
   spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'rubocop', '~> 0.58.1'
-  spec.add_development_dependency 'standalone_migrations', '~> 5.2.5'
+  spec.add_development_dependency 'standalone_migrations', '~> 5.2', '>= 5.2.5'
 end

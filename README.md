@@ -74,9 +74,9 @@ order.jsonb_update!(data: { paid: false, product_id: 3772389212 })
 
 - Support update of `json`/`jsonb` arrays via index and key/value id
 
-## Contributing
+## Requierements
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/Legsman/atomic_json.
+- PostgresQL version 9.5 minimum
 
 ## License
 
