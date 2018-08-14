@@ -3,8 +3,8 @@ PATH
   specs:
     atomic_json (0.1.0)
       activerecord (>= 5.0)
-      activesupport (>= 5.0)
-      pg (>= 0.18.1)
+      activesupport (~> 5.0)
+      pg (~> 0.18, >= 0.18.1)
 
 GEM
   remote: https://rubygems.org/
@@ -99,13 +99,13 @@ PLATFORMS
 DEPENDENCIES
   atomic_json!
   bundler (~> 1.16.a)
-  byebug (~> 10.0.2)
+  byebug (~> 10.0, >= 10.0.2)
   factory_bot (~> 4.0)
   minitest (~> 5.0)
   pg
   rake (~> 10.0)
   rubocop (~> 0.58.1)
-  standalone_migrations (~> 5.2.5)
+  standalone_migrations (~> 5.2, >= 5.2.5)
 
 BUNDLED WITH
    1.16.0.pre.2
