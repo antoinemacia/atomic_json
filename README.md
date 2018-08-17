@@ -29,7 +29,7 @@ Only the fields you've specified will be updated
 order.data
 => { amount: 50.00, first_name: 'Milkpie', last_name: 'Starlord' }
 
-order.jsonb_update(data: { amount: 10.00 })
+order.json_update(data: { amount: 10.00 })
 
 order.data
 => { amount: 10.00, first_name: 'Milkpie', last_name: 'Starlord' }
@@ -37,7 +37,7 @@ order.data
 
 For the sake of simplicity, AtomicJson mimic the behavior of standard ActiveRecord query methods to update database fields
 
-### jsonb_update_columns
+### json_update_columns
 
 Same as ActiveRecord `update_columns`, this method will make a straight database update
 - Validations are skipped
@@ -45,11 +45,11 @@ Same as ActiveRecord `update_columns`, this method will make a straight database
 - `updated_at` is not updated
 
 ```
-order.jsonb_update_columns(data: { paid: false })
+order.json_update_columns(data: { paid: false })
 => true
 ```
 
-### jsonb_update
+### json_update
 
 Same as ActiveRecord `update`, this method will
 - Invoke validations
@@ -57,17 +57,17 @@ Same as ActiveRecord `update`, this method will
 - Touch record `updated_at`
 
 ```
-order.jsonb_update(data: { paid: false, product_id: 3772389212 })
+order.json_update(data: { paid: false, product_id: 3772389212 })
 => false
 ```
 
-### jsonb_update!
+### json_update!
 
 Same as the above `json_update!`, but will raise an `ActiveRecord::RecordInvalid` exception 
 if a custom validation fails
 
 ```
-order.jsonb_update!(data: { paid: false, product_id: 3772389212 })
+order.json_update!(data: { paid: false, product_id: 3772389212 })
 => ActiveRecord::RecordInvalid Exception: Validation failed: data product_id can't be changed
 ```
 ## Todo's
